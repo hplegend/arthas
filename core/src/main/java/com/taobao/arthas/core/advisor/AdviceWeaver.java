@@ -31,7 +31,6 @@ public class AdviceWeaver extends ClassVisitor implements Opcodes {
     private final static Logger logger = LogUtil.getArthasLogger();
 
 
-
     // 线程帧栈堆栈大小
     private final static int FRAME_STACK_SIZE = 7;
     // 通知监听器集合
@@ -550,13 +549,36 @@ public class AdviceWeaver extends ClassVisitor implements Opcodes {
              * 加载before通知参数数组
              */
             private void loadArrayForBefore() {
+
+                /**
+                 * 定义一个长度为7的数组
+                 * */
                 push(7);
                 newArray(ASM_TYPE_OBJECT);
 
+                /**
+                 * 复制栈顶元素，并加复制元素压入栈顶
+                 * */
                 dup();
+
+                /**
+                 * 将int 0 推入栈栈顶
+                 * */
                 push(0);
+
+                /**
+                 * 将int 型数值推入栈栈顶
+                 * */
                 push(adviceId);
+
+                /**
+                 * 获取包装类型
+                 * */
                 box(ASM_TYPE_INT);
+
+                /**
+                 * 将数据压入栈顶
+                 * */
                 arrayStore(ASM_TYPE_INTEGER);
 
                 dup();

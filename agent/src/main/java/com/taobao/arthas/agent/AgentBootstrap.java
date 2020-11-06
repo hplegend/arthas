@@ -33,6 +33,7 @@ public class AgentBootstrap {
     private static final String BIND = "bind";
 
     private static PrintStream ps = System.err;
+
     static {
         try {
             File arthasLogDir = new File(System.getProperty("user.home") + File.separator + "logs" + File.separator
@@ -61,12 +62,19 @@ public class AgentBootstrap {
     }
 
     // 全局持有classloader用于隔离 Arthas 实现
+    // 仅仅用来加载agent.jar
     private static volatile ClassLoader arthasClassLoader;
 
+    /**
+     * 用于jvm启动即关联agent的情形。这种情形下，字节替换可能发生在系统启动时，而不是能在系统运行中动态的替换class
+     */
     public static void premain(String args, Instrumentation inst) {
         main(args, inst);
     }
 
+    /**
+     * 通过jdk下面的tools.jar包的VirtualMachine.attach连接到当前正在运行的jvm上，然后执行动态热替换。
+     */
     public static void agentmain(String args, Instrumentation inst) {
         main(args, inst);
     }
